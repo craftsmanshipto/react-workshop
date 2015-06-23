@@ -1,34 +1,19 @@
 var React = require('react');
+var Reflux = require('reflux');
+
+var actions = require('actions');
 
 var TodoList = require('TodoList.jsx');
 
-var todos = [
-  {
-    id: 1,
-    content: 'Step 1. Steal Underpants',
-    complete: false
-  },
-  {
-    id: 2,
-    content: 'Step 2. ...',
-    complete: false
-  },
-  {
-    id: 3,
-    content: 'Step 3. Profit.',
-    complete: false
-  }
-];
-
-var _nextId = 4;
+var TodoStore = require('TodoStore');
 
 var ENTER_KEY = 13;
 
 var TodoApp = React.createClass({
-  getInitialState: function() {
-    return {
-      todos: todos
-    };
+  getInitialState: function() { return {todos: []}; },
+  mixins: [Reflux.ListenerMixin],
+  componentDidMount: function() {
+    this.listenTo(TodoStore, this._onTodoChange, this._todoInit);
   },
 
   render: function() {
@@ -48,21 +33,23 @@ var TodoApp = React.createClass({
     );
   },
 
+  _todoInit: function(todos) {
+    this.setState({todos: todos});
+  },
+
+  _onTodoChange: function(todos) {
+    this.setState({todos: todos});
+  },
+
   _handleNewTodoKeyDown: function(e) {
     if (e.keyCode !== ENTER_KEY) { return; }
 
     e.preventDefault();
 
     var val = e.target.value;
-    if (val) {
-      var todos = this.state.todos;
-      todos.push({
-        id: _nextId++,
-        content: val,
-        complete: false
-      });
-      this.setState({todos: todos});
-    }
+
+    actions.createTodo(val);
+
     e.target.value = "";
   }
 });

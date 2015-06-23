@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "react": "^0.13.3",
+    "reflux": "^0.2.8",
     "todomvc-app-css": "^2.0.1",
     "todomvc-common": "^1.0.2"
   }
