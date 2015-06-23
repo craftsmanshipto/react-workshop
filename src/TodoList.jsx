@@ -15,7 +15,7 @@ var TodoList = React.createClass({
   },
 
   _getListItem: function(todo) {
-    return <TodoListItem todo={todo} />;
+    return <TodoListItem key={todo.id} todo={todo} />;
   }
 });
 
@@ -27,7 +27,7 @@ var TodoListItem = React.createClass({
   render: function() {
     var todo = this.props.todo;
     return (
-      <li key={todo.id}>
+      <li>
         <div className="view">
           <input className="toggle" type="checkbox" />
           <label>{todo.content}</label>
